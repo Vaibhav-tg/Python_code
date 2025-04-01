@@ -29,6 +29,6 @@ jobs:
         ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.88.43.0 <<'EOF'
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/pro/
+          git push origin main
           # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
-          git pull origin main
         EOF
