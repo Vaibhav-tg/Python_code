@@ -26,7 +26,7 @@ jobs:
     - name: Deploy to EC2 instance
       run: |
         # SSH into EC2 instance and deploy
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-3-88-43-0.compute-1.amazonaws.com <<'EOF'
+        ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa 3.88.43.0 <<'EOF'
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/pro/
           # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
