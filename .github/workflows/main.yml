@@ -30,4 +30,5 @@ jobs:
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/pro/
           # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
+          git pull origin main
         EOF
