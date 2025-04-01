@@ -1,0 +1,27 @@
+name: updates on 
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow when code is pushed to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # This job will run on a GitHub-hosted runner with Ubuntu
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2  # Checkout the repository to the GitHub Actions runner
+
+    - name: Set up SSH key for EC2
+      uses: webfactory/ssh-agent@v0.5.3  # Set up SSH agent for authentication
+      with:
+        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
+
+    - name: Deploy to EC2 instance
+      run: |
+        # SSH into EC2 instance and deploy
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.110.219.55 <<'EOF'
+          # Navigate to the project directory on the EC2 instance
+          cd /home/ubuntu/app/Number_guess
+          git pull origin main
