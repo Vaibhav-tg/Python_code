@@ -18,10 +18,16 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
 
+    - name: Create SSH key file
+      run: |
+        echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa  # Ensure the correct permissions on the key file
+
     - name: Deploy to EC2 instance
       run: |
         # SSH into EC2 instance and deploy
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-3-88-43-0.compute-1.amazonaws.com <<'EOF'
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/pro/
-          
+          # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
+        EOF
