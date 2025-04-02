@@ -21,9 +21,12 @@ jobs:
         key: ${{ secrets.SSH_KEY }}  
 
     - name: Deploy to EC2 instance
-      run: |
-          # Navigate to the project directory on the EC2 instance
-          cd /home/ubuntu/pro/
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.SSH_HOST }}
+        USERNAME: ${{ secrets.SSH_USERNAME }}
+        KEY: ${{ secrets.SSH_KEY }}
+              cd /home/ubuntu/pro/
           # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
-          git pull origin main
-        EOF
+          
+      
