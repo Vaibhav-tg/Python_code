@@ -35,3 +35,4 @@ jobs:
             # SSH into EC2 instance and deploy
             cd /home/ubuntu/pro/
             git pull origin main  # Pull the latest code from the main branch
+            sudo systemctl restart gunicorn
