@@ -1,32 +1,34 @@
-name: Updated
-
+name: Deploy to AWS EC2
 on:
   push:
     branches:
-      - main  
+      - main  # Trigger the workflow when code is pushed to the main branch
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest  # This job will run on a GitHub-hosted runner with Ubuntu
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2  
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Checkout the repository to the GitHub Actions runner
 
-    - name: Set up SSH key for EC2
-      uses: appleboy/ssh-action@master  
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}  
+      - name: Set up SSH key for EC2
+        uses: webfactory/ssh-agent@v0.5.3  # Set up SSH agent for authentication
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
 
-    - name: Deploy to EC2 instance
-      uses: appleboy/scp-action@master
-      with:
-        HOST: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        KEY: ${{ secrets.SSH_KEY }}
-              cd /home/ubuntu/pro/
-          # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
-          
-      
+      - name: Create SSH key file
+        run: |
+          echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa  # Ensure the correct permissions on the key file
+
+      - name: Deploy to EC2 instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}
+          script: |
+            # SSH into EC2 instance and deploy
+            cd /home/ubuntu/pro/
+            git pull origin main  # Pull the latest code from the main branch
