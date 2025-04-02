@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2
+name: Updated
 
 on:
   push:
@@ -14,14 +14,11 @@ jobs:
       uses: actions/checkout@v2  # Checkout the repository to the GitHub Actions runner
 
     - name: Set up SSH key for EC2
-      uses: webfactory/ssh-agent@v0.5.3  # Set up SSH agent for authentication
+      uses: appleboy/ssh-action@master  # Set up SSH agent for authentication
       with:
-        ssh-private-key: ${{ secrets.AWS_SSH_PRIVATE_KEY }}  # Use the private key stored in GitHub secrets
-
-    - name: Create SSH key file
-      run: |
-        echo "${{ secrets.AWS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa  # Ensure the correct permissions on the key file
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}  # Use the private key stored in GitHub secret
 
     - name: Deploy to EC2 instance
       run: |
