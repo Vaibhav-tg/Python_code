@@ -3,27 +3,25 @@ name: Updated
 on:
   push:
     branches:
-      - main  # Trigger the workflow when code is pushed to the main branch
+      - main  
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # This job will run on a GitHub-hosted runner with Ubuntu
+    runs-on: ubuntu-latest 
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2  # Checkout the repository to the GitHub Actions runner
+      uses: actions/checkout@v2  
 
     - name: Set up SSH key for EC2
-      uses: appleboy/ssh-action@master  # Set up SSH agent for authentication
+      uses: appleboy/ssh-action@master  
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
-        key: ${{ secrets.SSH_KEY }}  # Use the private key stored in GitHub secret
+        key: ${{ secrets.SSH_KEY }}  
 
     - name: Deploy to EC2 instance
       run: |
-        # SSH into EC2 instance and deploy
-        ssh -T -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.88.43.0 <<'EOF'
           # Navigate to the project directory on the EC2 instance
           cd /home/ubuntu/pro/
           # Add deployment commands here (e.g., pull the latest code, restart services, etc.)
